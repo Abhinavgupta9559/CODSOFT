@@ -1,0 +1,33 @@
+import tkinter as tk
+from tkinter import messagebox
+import json
+import os
+
+TASKS_FILE = "tasks_gui.json"
+
+# Load tasks from file
+def load_tasks():
+    if os.path.exists(TASKS_FILE):
+        with open(TASKS_FILE, "r") as f:
+            return json.load(f)
+    return []
+
+# Save tasks to file
+def save_tasks():
+    with open(TASKS_FILE, "w") as f:
+        json.dump(tasks, f, indent=4)
+
+# Update listbox display
+def update_listbox():
+    listbox.delete(0, tk.END)
+    for i, task in enumerate(tasks):
+        status = "✔️" if task["completed"] else "❌"
+        listbox.insert(tk.END, f"{i+1}. {status} {task['title']}")
+
+# Add new task
+def add_task():
+    title = entry.get().strip()
+    if title:
+        tasks.append({"title": title, "completed": False})
+        entry.delete(0, tk.END)
+        update_listbox()
